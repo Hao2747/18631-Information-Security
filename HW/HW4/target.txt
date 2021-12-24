@@ -1,0 +1,26 @@
+080485e0 <vuln>:
+ 80485e0:       56                      push   %esi
+ 80485e1:       53                      push   %ebx
+ 80485e2:       81 ec b0 00 00 00       sub    $0xb0,%esp
+ 80485e8:       e8 d3 fe ff ff          call   80484c0 <__x86.get_pc_thunk.bx>
+ 80485ed:       81 c3 13 1a 00 00       add    $0x1a13,%ebx
+ 80485f3:       8d 74 24 18             lea    0x18(%esp),%esi
+ 80485f7:       56                      push   %esi
+ 80485f8:       e8 f3 fd ff ff          call   80483f0 <gets@plt>
+ 80485fd:       89 34 24                mov    %esi,(%esp)
+ 8048600:       e8 1b fe ff ff          call   8048420 <puts@plt>
+ 8048605:       83 c4 04                add    $0x4,%esp
+ 8048608:       8b 83 fc ff ff ff       mov    -0x4(%ebx),%eax
+ 804860e:       ff 30                   pushl  (%eax)
+ 8048610:       e8 cb fd ff ff          call   80483e0 <fflush@plt>
+ 8048615:       81 c4 b4 00 00 00       add    $0xb4,%esp
+ 804861b:       5b                      pop    %ebx
+ 804861c:       5e                      pop    %esi
+ 804861d:       c3                      ret
+
+
+
+ 080483f0 <gets@plt>:
+ 80483f0:       ff 25 10 a0 04 08       jmp    *0x804a010
+ 80483f6:       68 08 00 00 00          push   $0x8
+ 80483fb:       e9 d0 ff ff ff          jmp    80483d0 <.plt>

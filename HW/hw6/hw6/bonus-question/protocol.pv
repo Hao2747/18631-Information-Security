@@ -1,0 +1,64 @@
+(* 
+This is the starter code/template for question 4 of the homework.
+You are not required to use any of this template and feel free 
+to make any changes.
+*)
+
+(* Asymmetric key encryption *)
+type skey. 
+type pkey.
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+
+reduc forall m: bitstring, sk:skey; adec(aenc(m,pk(sk)),sk) = m.
+
+(* Two honest host names A and B*)
+type host.
+free A, B: host.
+
+(* Public channel for communication*)
+free c : channel. 
+
+(* Private message*)
+free mx : bitstring [private].
+
+(* Other declaration and queries *)
+(* Query for secrecy of message mx *)
+query attacker(mx).
+
+(* Events for before message sends out and after message receives at both host *)
+event acceptsA(bitstring,pkey).
+event acceptsB(host, bitstring).
+event termA(host, bitstring).
+event termB(bitstring,pkey).
+
+(* injective event to prove the authentication of A and B *)
+query x:bitstring, y:pkey; inj-event(termB(x,y))==>inj-event(acceptsA(x,y)).
+query x:host, y:bitstring; inj-event(termA(x,y))==>inj-event(acceptsB(x,y)).
+
+let hostA(pkA,pkB:pkey, skA:skey) =
+  (* Alice process*)
+  event acceptsA(mx,pkA);
+  out(c, aenc((mx,pkA),pkB));
+  in(c,x:bitstring);
+  (* If Alice received message is B and the mx that Alice sent out, then trigger event termA *)
+  let (=B, =mx) = adec(x,skA) in
+  event termA(B,mx).
+
+let hostB(skB:skey)= 
+  (* Bob process*)
+  in(c,x:bitstring);
+  (* Bob decrypts message with skB and later encrypt its desired message with pkX (here since A sends the pk, then it is pkA) *)
+  let (message: bitstring, pkX:pkey) = adec(x,skB) in
+  event termB(message, pkX);
+  event acceptsB(B,message);
+  out(c,aenc((B,message),pkX)).
+
+process
+new skA:skey;
+new skB:skey;
+let pkA = pk(skA) in out(c,pkA);
+let pkB = pk(skB) in out(c,pkB);
+( (!hostA(pkA,pkB,skA )) | (!hostB(skB)) )
+

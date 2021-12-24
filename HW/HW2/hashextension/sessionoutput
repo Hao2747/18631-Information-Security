@@ -1,0 +1,9 @@
+Here is your cookie as plaintext:
+username=nekomusume&groups=students,users,
+And here it is as hex:
+757365726e616d653d6e656b6f6d7573756d652667726f7570733d73747564656e74732c75736572732c
+SECRET_KEY is a 16-byte key that is unknown to you
+The signature is computed as SHA256(SECRET_KEY || message)
+The signature of your cookie is:
+0189f6fa69acb09e366d3239e20ea9c019bd12c6bc98686ffdeec9afb7e35104
+
